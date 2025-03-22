@@ -86,7 +86,7 @@
 
         .toggle-btn {
             position: absolute;
-            right: 10px;
+            right: -5px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
@@ -118,6 +118,45 @@
             height: auto;
             overflow: visible;
             margin-right: 5px;
+        }
+        
+        .title-container {
+            flex-grow: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .full-title {
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .collapsed-title {
+            display: none;
+        }
+        
+        #nav.collapsed .full-title {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        #nav.collapsed .collapsed-title {
+            display: inline-block;
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        #nav.collapsed .toggle-btn {
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .toggle-btn::before {
+            transition: all 0.3s;
+        }
+        
+        #nav.collapsed .toggle-btn::before {
+            content: "\f054";
         }
 
         #nav.collapsed .toggle-btn {
@@ -195,8 +234,11 @@
 <body>
     <div id="nav">
         <div class="nav-header">
-            🐶 材料狗
-            <i class="fas fa-bars toggle-btn" onclick="toggleNav()"></i>
+            <div class="title-container">
+                <span class="full-title">🐶材料狗</span>
+                <span class="collapsed-title"></span>
+            </div>
+            <i class="fas fa-angle-left toggle-btn" onclick="toggleNav()"></i>
         </div>
 
         <div class="ai-group">
@@ -232,7 +274,7 @@
                 党章党规
             </div>
             <div class="nav-item" onclick="loadPage('https://jhsjk.people.cn/')">
-                <img src="https://www.people.com.cn/favicon.ico" alt="12371">
+                <img src="http://www.people.com.cn/favicon.ico" alt="12371">
                 讲话数据库
             </div>
         </div>
@@ -283,6 +325,11 @@
         function toggleNav() {
             const nav = document.getElementById('nav');
             const isCollapsed = nav.classList.toggle('collapsed');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            
+            // 切换图标
+            toggleBtn.classList.toggle('fa-angle-left', !isCollapsed);
+            toggleBtn.classList.toggle('fa-angle-right', isCollapsed);
             
             // 保存状态到localStorage
             localStorage.setItem('navCollapsed', isCollapsed);
