@@ -372,11 +372,9 @@
         let firstLoad = true;
 
 function loadPage(url) {
-    if(firstLoad) {
+    if (firstLoad) {
         document.getElementById('welcome-message').style.display = 'none';
         firstLoad = false;
-        document.getElementById('frame').src = 'https://metaso.cn/s/SJutkeR';
-        return;
     }
             document.getElementById('frame').src = url;
             
