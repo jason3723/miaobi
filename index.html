@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>🐶材料狗</title>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDBmZjAwIj7wn6SWPC90ZXh0Pjwvc3ZnPg==">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @media (max-width: 600px) {
+            .group-title {
+                font-size: 12px !important;
+                margin: 8px 0;
+            }
+            #nav {
+                width: 15% !important;
+                padding: 8px !important;
+            }
+            #nav.collapsed {
+                width: 10% !important;
+            }
+            .nav-item {
+                padding: 16px !important;
+                font-size: 14px !important;
+                margin: 12px 0 !important;
+            }
+            .nav-item img {
+                width: 24px !important;
+                height: 24px !important;
+            }
+            #content {
+                width: 85% !important;
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            background: #1a1a2e;
+            font-family: 'Courier New', monospace;
+        }
+
+        .group-title {
+            color: #00ff88;
+            font-size: 14px;
+            margin: 15px 0 10px;
+            padding-left: 8px;
+            border-left: 3px solid #00ff00;
+            text-shadow: 0 0 8px rgba(0,255,0,0.3);
+        }
+
+        .group-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ff0055, transparent);
+            margin: 10px 0;
+        }
+
+        #nav.collapsed .group-title,
+        #nav.collapsed .group-divider {
+            display: none;
+        }
+
+        #nav {
+            width: 10%;
+            background: #0a0a0a;
+            padding: 15px;
+            border-right: 1px solid #2d2d2d;
+        }
+
+        .nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2d2d2d;
+            color: #00ff00;
+            font-size: 18px;
+            font-weight: bold;
+            position: relative;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #00ff00;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn:hover {
+            color: #00ff88;
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        #nav.collapsed {
+            width: 5% !important;
+        }
+
+        #nav.collapsed .nav-item {
+            justify-content: center;
+            padding: 8px;
+            font-size: 0;
+        }
+
+        #nav.collapsed .nav-header {
+            padding: 0 5px 15px;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.3s;
+            position: relative;
+            height: auto;
+            overflow: visible;
+            margin-right: 5px;
+        }
+
+        #nav.collapsed .toggle-btn {
+            left: 50%;
+            right: auto;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s;
+        }
+
+        #nav.collapsed .nav-item img {
+            margin-right: 0;
+            width: 24px;
+            height: 24px;
+            filter: none;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            color: #cccccc;
+            border: 1px solid #2d2d2d;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(45deg, #003300, #002200);
+            border-color: #00ff00;
+            transform: translateX(10px) scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            animation: navPulse 0.6s ease-out;
+        }
+
+        @keyframes navPulse {
+            0% { transform: translateX(10px) scale(1); }
+            50% { transform: translateX(10px) scale(1.1); }
+            100% { transform: translateX(10px) scale(1.05); }
+        }
+
+        .nav-item img {
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            filter: grayscale(100%) brightness(150%);
+        }
+
+        #content {
+            width: 90%;
+            height: 100vh;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        @keyframes particle {
+            0% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(
+                    calc(var(--dx) * 1px),
+                    calc(var(--dy) * 1px)
+                ) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="nav">
+        <div class="nav-header">
+            🐶 材料狗
+            <i class="fas fa-bars toggle-btn" onclick="toggleNav()"></i>
+        </div>
+
+        <div class="ai-group">
+            <div class="group-title">AI 助手</div>
+            <div class="group-divider"></div>
+            <div class="nav-item" onclick="loadPage('https://metaso.cn/s/SJutkeR')">
+                <img src="https://metaso.cn/favicon.ico" alt="metaso">
+                党务知识库
+            </div>
+        <div class="nav-item" onclick="loadPage('https://www.doubao.com/')">
+            <img src="https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/logo-doubao-overflow.png" alt="doubao">
+            豆包AI
+        </div>
+        <div class="nav-item" onclick="loadPage('https://www.deepseek.com/')">
+            <img src="https://www.deepseek.com/favicon.ico" alt="deepseek">
+            DeepSeek
+        </div>
+        <div class="nav-item" onclick="loadPage('https://lingxi.wps.cn/')">
+            <img src="https://www.wps.cn/favicon.ico" alt="wps">
+            WPS灵犀
+        </div>
+    </div>
+        
+        <div class="inspiration-group">
+            <div class="group-title">灵感源泉</div>
+            <div class="group-divider"></div>
+            <div class="nav-item" onclick="loadPage('https://www.shenyandayi.com/')">
+                <img src="https://www.shenyandayi.com/favicon.ico" alt="zhiyan">
+                知言达意
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <iframe id="frame" src="https://metaso.cn/s/SJutkeR"></iframe>
+    </div>
+
+    <script>
+        function loadPage(url) {
+            document.getElementById('frame').src = url;
+            
+            // 粒子效果
+            const rect = event.target.getBoundingClientRect();
+            const colors = ['#FF3366', '#33FF99', '#FFAA00', '#3366FF', '#FF33FF'];
+            for(let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: 4px;
+                    height: 4px;
+                    background: ${colors[Math.floor(Math.random() * 5)]};
+                width: ${6 + Math.random() * 6}px;
+                height: ${6 + Math.random() * 6}px;
+                    border-radius: 50%;
+                    pointer-events: none;
+                    left: ${rect.left + rect.width/2}px;
+                    top: ${rect.top + rect.height/2}px;
+                    animation: particle 0.6s ease-out;
+                `;
+                
+                const angle = (Math.PI * 2 * i)/8;
+                particle.style.setProperty('--dx', Math.cos(angle) * 60);
+                particle.style.setProperty('--dy', Math.sin(angle) * 60);
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 600);
+            }
+
+            // 光晕效果
+            event.target.style.filter = 'brightness(1.2) drop-shadow(0 0 12px #00ff88)';
+            setTimeout(() => {
+                event.target.style.filter = 'none';
+            }, 300);
+        }
+
+        function toggleNav() {
+            const nav = document.getElementById('nav');
+            const isCollapsed = nav.classList.toggle('collapsed');
+            
+            // 保存状态到localStorage
+            localStorage.setItem('navCollapsed', isCollapsed);
+            
+            // 调整iframe宽度
+            document.getElementById('content').style.width = isCollapsed ? '97%' : '90%';
+        }
+
+        // 初始化时读取状态
+        window.onload = function() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const storedState = localStorage.getItem('navCollapsed');
+            
+            if (isMobile && storedState === null) {
+                document.getElementById('nav').classList.add('collapsed');
+                document.getElementById('content').style.width = '97%';
+                localStorage.setItem('navCollapsed', 'true');
+            } else if (storedState === 'true') {
+                document.getElementById('nav').classList.add('collapsed');
+                document.getElementById('content').style.width = '97%';
+            }
+        };
+    </script>
+</body>
+</html>
