@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="https://cdn3.iconfinder.com/data/icons/animal-40/128/Animal_Dog-512.png">
     <style>
+@keyframes neonGlow {
+    0% { text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88; }
+    50% { text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff; }
+    100% { text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88; }
+}
+
+#welcome-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    color: #00ff88;
+    animation: neonGlow 2s infinite;
+    z-index: 999;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+}
         @media (max-width: 600px) {
             .group-title {
                 font-size: 12px !important;
@@ -265,6 +284,7 @@
 }
 
 #nav.collapsed .nav-footer {
+    display: none;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -344,11 +364,20 @@
     </div>
 
     <div id="content">
-        <iframe id="frame" src="https://metaso.cn/s/SJutkeR"></iframe>
+        <div id="welcome-message">欢迎使用小陈的AI工具箱</div>
+<iframe id="frame" src=""></iframe>
     </div>
 
     <script>
-        function loadPage(url) {
+        let firstLoad = true;
+
+function loadPage(url) {
+    if(firstLoad) {
+        document.getElementById('welcome-message').style.display = 'none';
+        firstLoad = false;
+        document.getElementById('frame').src = 'https://metaso.cn/s/SJutkeR';
+        return;
+    }
             document.getElementById('frame').src = url;
             
             // 粒子效果
