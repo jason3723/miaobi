@@ -107,6 +107,32 @@
             justify-content: center;
             padding: 8px;
             font-size: 0;
+            position: relative;
+        }
+
+        #nav.collapsed .nav-item::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 120%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0a0a0a;
+            color: #00ff88;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            border: 1px solid #00ff0055;
+            box-shadow: 0 0 8px rgba(0,255,0,0.2);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            white-space: nowrap;
+        }
+
+        #nav.collapsed .nav-item:hover::after {
+            opacity: 1;
+            transform: translateY(-50%) translateX(8px);
+            filter: drop-shadow(0 0 4px rgba(0,255,128,0.3));
         }
 
         #nav.collapsed .nav-header {
@@ -244,37 +270,50 @@
         <div class="ai-group">
             <div class="group-title">AI 助手</div>
             <div class="group-divider"></div>
-            <div class="nav-item" onclick="loadPage('https://metaso.cn/s/SJutkeR')">
+            <div class="nav-item" onclick="loadPage('https://metaso.cn/s/SJutkeR')" data-tooltip="党务知识库">
                 <img src="https://metaso.cn/favicon.ico" alt="metaso">
                 党务知识库
             </div>
-        <div class="nav-item" onclick="loadPage('https://www.doubao.com/')">
+        <div class="nav-item" onclick="loadPage('https://www.doubao.com/')" data-tooltip="豆包AI">
             <img src="https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/logo-doubao-overflow.png" alt="doubao">
             豆包AI
         </div>
-        <div class="nav-item" onclick="loadPage('https://www.deepseek.com/')">
+        <div class="nav-item" onclick="loadPage('https://www.deepseek.com/')" data-tooltip="DeepSeek">
             <img src="https://www.deepseek.com/favicon.ico" alt="deepseek">
             DeepSeek
         </div>
-        <div class="nav-item" onclick="loadPage('https://lingxi.wps.cn/')">
+        <div class="nav-item" onclick="loadPage('https://lingxi.wps.cn/')" data-tooltip="WPS灵犀">
             <img src="https://www.wps.cn/favicon.ico" alt="wps">
             WPS灵犀
         </div>
+
+    <div class="document-group">
+        <div class="group-title">公文智写</div>
+        <div class="group-divider"></div>
+        <div class="nav-item" onclick="loadPage('https://tbox.alipay.com/share/202503APfyC200305431?platform=WebService')" data-tooltip="选择模型生成讲话稿">
+            <img src="https://www.alipay.com/favicon.ico" alt="alipay">
+            选模生成
+        </div>
+        <div class="nav-item" onclick="loadPage('https://tbox.alipay.com/share/202503AP2kyg00306840?platform=WebService')" data-tooltip="三模型对比生成讲话稿">
+            <img src="https://www.alipay.com/favicon.ico" alt="alipay">
+            对比生成
+        </div>
+    </div>
     </div>
         
         <div class="inspiration-group">
             <div class="group-title">灵感源泉</div>
             <div class="group-divider"></div>
-            <div class="nav-item" onclick="loadPage('https://www.shenyandayi.com/')">
+            <div class="nav-item" onclick="loadPage('https://www.shenyandayi.com/')" data-tooltip="深言达意">
                 <img src="https://www.shenyandayi.com/favicon.ico" alt="zhiyan">
                 深言达意
             </div>
-            <div class="nav-item" onclick="loadPage('https://www.12371.cn/special/dnfg/')">
+            <div class="nav-item" onclick="loadPage('https://www.12371.cn/special/dnfg/')" data-tooltip="党章党规">
                 <img src="https://www.12371.cn/favicon.ico" alt="12371">
                 党章党规
             </div>
-            <div class="nav-item" onclick="loadPage('https://jhsjk.people.cn/')">
-                <img src="http://www.people.com.cn/favicon.ico" alt="12371">
+            <div class="nav-item" onclick="loadPage('https://jhsjk.people.cn/')" data-tooltip="重要讲话数据库">
+                <img src="http://www.people.com.cn/favicon.ico" alt="renmin">
                 讲话数据库
             </div>
         </div>
