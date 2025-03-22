@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>🐶材料狗</title>
-    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDBmZjAwIj7wn6SWPC90ZXh0Pjwvc3ZnPg==">
+    <title>材料狗</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="https://cdn3.iconfinder.com/data/icons/animal-40/128/Animal_Dog-512.png">
     <style>
         @media (max-width: 600px) {
             .group-title {
@@ -254,7 +254,31 @@
                 opacity: 0;
             }
         }
-    </style>
+    .nav-footer {
+    color: #fff;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 12px;
+    opacity: 0.8;
+    transition: all 0.3s;
+}
+
+#nav.collapsed .nav-footer {
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+    padding: 0 8px;
+}
+
+@media (max-width: 600px) {
+    .nav-footer {
+        font-size: 10px;
+        bottom: 10px;
+    }
+}
+</style>
 </head>
 <body>
     <div id="nav">
@@ -316,6 +340,7 @@
                 讲话数据库
             </div>
         </div>
+        <div class="nav-footer">作者：小陈😊</div>
     </div>
 
     <div id="content">
