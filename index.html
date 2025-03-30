@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>材料狗</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            padding-top: 70px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 新增折叠布局调整 */
+        .collapsed {
+            padding-bottom: 0;
+        }
+        .collapsed body {
+            padding: 10px 20px;
+            min-height: calc(100vh - 60px);
+        }
+
+        :root {
+            --primary: #2a6df4;
+            --secondary: #4ad0ee;
+            --text: #2d3436;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(100vw - 40px);
+            background: var(--card-bg);
+            padding: 10px 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-sizing: border-box;
+            margin: 0 auto;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .header h1 {
+            color: #333;
+            display: inline-block;
+            margin: 0;
+            font-size: 1.8rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #555;
+            line-height: 1;
+            padding: 0;
+            vertical-align: middle;
+        }
+        .collapsed .nav-container {
+            display: none;
+        }
+        .collapsed .add-link {
+            display: none;
+        }
+
+        /* 新增折叠状态下的添加模块隐藏 */
+        .collapsed .add-link {
+            display: none !important;
+        }
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .nav-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(31, 38, 135, 0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .nav-item:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 6px 20px rgba(31, 38, 135, 0.2);
+        }
+        .site-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 8px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .nav-item span {
+            display: block;
+            font-size: 0.8rem;
+            color: #777;
+            line-height: 1.2;
+        }
+        .add-link {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .add-link input {
+            padding: 12px 16px;
+            border: 2px solid rgba(42, 109, 244, 0.15);
+            border-radius: 8px;
+            margin-right: 12px;
+            width: 300px;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+        }
+
+        .add-link input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(42, 109, 244, 0.1);
+        }
+        .add-link button {
+            padding: 12px 24px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+
+        .add-link button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        iframe {
+            width: 100%;
+            height: calc(100vh - 200px);
+            border: none;
+            margin-top: 20px;
+            display: none;
+            flex-grow: 1;
+        }
+        /* 折叠状态高度适配 */
+        .collapsed iframe {
+            height: calc(100vh - 80px);
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            .header {
+                width: calc(100vw - 20px);
+                padding: 8px 10px;
+            }
+            .nav-container {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 8px;
+                max-width: 100%;
+                padding: 0 10px;
+            }
+            .nav-item {
+                padding: 10px 6px;
+            }
+            .site-icon {
+                width: 20px;
+                height: 20px;
+            }
+            .nav-item span {
+                font-size: 0.7rem;
+            }
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+            .add-link input {
+                width: 100%;
+                margin-bottom: 12px;
+            }
+            .add-link {
+                flex-wrap: wrap;
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>材料狗 <i class="fas fa-dog"></i></h1>
+        <button id="toggleNav" class="toggle-btn"><i class="fas fa-bars"></i></button>
+    </div>
+    
+    <div class="nav-container" id="navContainer">
+        <!-- 默认导航项将通过JavaScript动态添加 -->
+    </div>
+    
+    <div class="add-link">
+        <input type="text" id="newLink" placeholder="输入网址 (例如: https://example.com)">
+        <input type="text" id="newName" placeholder="输入网站名称">
+        <button onclick="addCustomLink()">添加</button>
+    </div>
+    
+    <iframe id="contentFrame"></iframe>
+    
+    <script>
+        // 默认导航项
+        const defaultLinks = [
+            { name: '党务知识库', url: 'https://metaso.cn/s/SJutkeR', icon: 'https://metaso.cn/favicon.ico' },
+            { name: '豆包AI', url: 'https://www.doubao.com', icon: 'https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/logo-doubao-overflow.png' },
+            { name: 'DeepSeek', url: 'https://www.deepseek.com', icon: 'https://www.deepseek.com/favicon.ico' },
+            { name: 'WPS灵犀', url: 'https://lingxi.wps.cn', icon: 'https://www.wps.cn/favicon.ico' },
+            { name: '讲话对比生成', url: 'https://tbox.alipay.com/share/202503AP2kyg00306840?platform=WebService', icon: 'https://www.alipay.com/favicon.ico' },
+            { name: '讲话全模生成', url: 'https://tbox.alipay.com/share/202503APfyC200305431?platform=WebService', icon: 'https://www.alipay.com/favicon.ico' },
+            { name: '讲话数据库', url: 'https://jhsjk.people.cn/', icon: 'http://www.people.com.cn/favicon.ico' },
+            { name: '党章党规', url: 'https://www.12371.cn/special/dnfg/', icon: 'https://www.12371.cn/favicon.ico' },
+            { name: '深言达意', url: 'https://www.shenyandayi.com/', icon: 'https://www.shenyandayi.com/favicon.ico' }
+        ];
+        
+        // 初始化导航
+        function initNav() {
+            const navContainer = document.getElementById('navContainer');
+            
+            // 加载本地存储的自定义链接
+            const customLinks = JSON.parse(localStorage.getItem('customLinks') || '[]');
+            const allLinks = [...defaultLinks, ...customLinks];
+            
+            allLinks.forEach(link => {
+                const navItem = document.createElement('div');
+                navItem.className = 'nav-item';
+                navItem.innerHTML = `
+                    <img class="site-icon" src="${link.icon}" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/link.svg';this.style.width='24px';this.style.opacity='0.6'" />
+                    <span>${link.name}</span>
+                `;
+                navItem.onclick = () => openLink(link.url);
+                navContainer.appendChild(navItem);
+            });
+        }
+        
+        // 打开链接（内嵌）
+        function openLink(url) {
+            const frame = document.getElementById('contentFrame');
+            frame.style.display = 'block';
+            document.body.classList.add('collapsed');
+            // 确保URL以http://或https://开头
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'http://' + url;
+            }
+            frame.src = url;
+        }
+        
+        // 添加自定义链接
+        function addCustomLink() {
+            const urlInput = document.getElementById('newLink');
+            const nameInput = document.getElementById('newName');
+            
+            if (!urlInput.value || !nameInput.value) {
+                alert('请输入网址和名称');
+                return;
+            }
+            
+            // 验证URL格式
+            try {
+                new URL(urlInput.value);
+            } catch {
+                alert('请输入有效的网址 (例如: https://example.com)');
+                return;
+            }
+            
+            // 获取现有自定义链接
+            const customLinks = JSON.parse(localStorage.getItem('customLinks') || '[]');
+            
+            // 添加新链接
+            customLinks.push({
+                name: nameInput.value,
+                url: urlInput.value,
+                icon: `https://www.google.com/s2/favicons?domain=${new URL(urlInput.value).hostname}`
+            });
+            
+            // 保存到本地存储
+            localStorage.setItem('customLinks', JSON.stringify(customLinks));
+            
+            // 重新加载导航
+            document.getElementById('navContainer').innerHTML = '';
+            initNav();
+            
+            // 清空输入框
+            urlInput.value = '';
+            nameInput.value = '';
+            
+            alert('链接添加成功！');
+        }
+        
+        // 页面加载时初始化
+        window.onload = function() {
+            initNav();
+            
+            // 添加导航栏折叠功能
+            document.getElementById('toggleNav').addEventListener('click', function() {
+                document.body.classList.toggle('collapsed');
+            });
+            
+            // 添加链接编辑功能
+            document.getElementById('navContainer').addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                const navItem = e.target.closest('.nav-item');
+                if (navItem) {
+                    const linkName = navItem.querySelector('span').textContent;
+                    const customLinks = JSON.parse(localStorage.getItem('customLinks') || '[]');
+                    const linkIndex = customLinks.findIndex(link => link.name === linkName);
+                    
+                    if (linkIndex !== -1) {
+                        if (confirm(`确定要删除链接 "${linkName}" 吗？`)) {
+                            customLinks.splice(linkIndex, 1);
+                            localStorage.setItem('customLinks', JSON.stringify(customLinks));
+                            document.getElementById('navContainer').innerHTML = '';
+                            initNav();
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
