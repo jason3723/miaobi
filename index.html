@@ -76,8 +76,24 @@
         }
 
         /* 新增折叠状态下的添加模块隐藏 */
-        .collapsed .add-link {
+        .collapsed .add-link,
+        .collapsed .back-to-old {
             display: none !important;
+        }
+        
+        .back-to-old {
+            text-align: center;
+            margin: 15px 0;
+            color: #666;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .back-to-old i {
+            margin-right: 8px;
+            color: #2a6df4;
         }
         .nav-container {
             display: grid;
@@ -213,6 +229,11 @@
         <input type="text" id="newName" placeholder="输入网站名称">
         <button onclick="addCustomLink()">添加</button>
     </div>
+    
+    <a href="old.html" class="back-to-old">
+        <i class="fas fa-arrow-circle-left"></i>
+        返回旧版
+    </a>
     
     <iframe id="contentFrame"></iframe>
     
