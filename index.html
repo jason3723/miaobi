@@ -99,8 +99,11 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 15px;
-            max-width: 1000px;
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
         .nav-item {
             background: var(--card-bg);
@@ -344,15 +347,122 @@
                     const linkIndex = customLinks.findIndex(link => link.name === linkName);
                     
                     if (linkIndex !== -1) {
-                        if (confirm(`确定要删除链接 "${linkName}" 吗？`)) {
-                            customLinks.splice(linkIndex, 1);
-                            localStorage.setItem('customLinks', JSON.stringify(customLinks));
-                            document.getElementById('navContainer').innerHTML = '';
-                            initNav();
-                        }
+                        // 创建编辑菜单
+                        const menu = document.createElement('div');
+                        menu.style.position = 'absolute';
+                        menu.style.left = e.clientX + 'px';
+                        menu.style.top = e.clientY + 'px';
+                        menu.style.background = 'white';
+                        menu.style.padding = '10px';
+                        menu.style.borderRadius = '8px';
+                        menu.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                        
+                        // 编辑按钮
+                        const editBtn = document.createElement('button');
+                        editBtn.textContent = '编辑链接';
+                        editBtn.style.display = 'block';
+                        editBtn.style.marginBottom = '8px';
+                        editBtn.onclick = () => showEditDialog(customLinks[linkIndex]);
+                        
+                        // 删除按钮
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.textContent = '删除链接';
+                        deleteBtn.style.color = 'red';
+                        deleteBtn.onclick = () => {
+                            if (confirm(`确定要删除链接 "${linkName}" 吗？`)) {
+                                customLinks.splice(linkIndex, 1);
+                                localStorage.setItem('customLinks', JSON.stringify(customLinks));
+                                document.getElementById('navContainer').innerHTML = '';
+                                initNav();
+                            }
+                            menu.remove();
+                        };
+                        
+                        menu.appendChild(editBtn);
+                        menu.appendChild(deleteBtn);
+                        document.body.appendChild(menu);
+                        
+                        // 点击外部关闭菜单
+                        setTimeout(() => {
+                            const closeMenu = () => {
+                                menu.remove();
+                                document.removeEventListener('click', closeMenu);
+                            };
+                            document.addEventListener('click', closeMenu);
+                        }, 0);
                     }
                 }
             });
+            
+            // 编辑弹窗功能
+            function showEditDialog(linkData) {
+                const dialog = document.createElement('div');
+                dialog.style.position = 'fixed';
+                dialog.style.top = '50%';
+                dialog.style.left = '50%';
+                dialog.style.transform = 'translate(-50%, -50%)';
+                dialog.style.background = 'var(--card-bg)';
+                dialog.style.padding = '20px';
+                dialog.style.borderRadius = '12px';
+                dialog.style.boxShadow = '0 4px 24px rgba(0,0,0,0.2)';
+                dialog.style.zIndex = '1001';
+                
+                const html = `
+                    <h3 style="margin:0 0 15px 0;color:var(--text)">编辑链接</h3>
+                    <input 
+                        type="text" 
+                        id="editName" 
+                        value="${linkData.name}" 
+                        style="margin-bottom:12px;width:100%"
+                        placeholder="新名称"
+                    >
+                    <input 
+                        type="url"
+                        id="editUrl" 
+                        value="${linkData.url}"
+                        style="margin-bottom:15px;width:100%"
+                        placeholder="新网址"
+                    >
+                    <div style="display:flex;gap:10px;justify-content:flex-end">
+                        <button onclick="this.parentElement.parentElement.remove()">取消</button>
+                        <button onclick="saveEdit('${linkData.name}', this.parentElement.parentElement)" style="background:var(--primary);color:white">保存</button>
+                    </div>
+                `;
+                dialog.innerHTML = html;
+                document.body.appendChild(dialog);
+            }
+            
+            function saveEdit(oldName, dialog) {
+                const newName = dialog.querySelector('#editName').value;
+                const newUrl = dialog.querySelector('#editUrl').value;
+                
+                if (!newName || !newUrl) {
+                    alert('请输入链接名称和网址');
+                    return;
+                }
+                
+                try {
+                    new URL(newUrl);
+                } catch {
+                    alert('请输入有效的网址格式');
+                    return;
+                }
+                
+                const customLinks = JSON.parse(localStorage.getItem('customLinks') || '[]');
+                const index = customLinks.findIndex(link => link.name === oldName);
+                
+                if (index !== -1) {
+                    customLinks[index] = {
+                        name: newName,
+                        url: newUrl,
+                        icon: `https://www.google.com/s2/favicons?domain=${new URL(newUrl).hostname}`
+                    };
+                    localStorage.setItem('customLinks', JSON.stringify(customLinks));
+                    document.getElementById('navContainer').innerHTML = '';
+                    initNav();
+                    dialog.remove();
+                }
+            }
         };
     </script>
 </body>
